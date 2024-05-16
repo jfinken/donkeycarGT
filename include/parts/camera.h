@@ -14,8 +14,7 @@ class Camera : public donkeycar::Part
 public:
     Camera(const std::string& part_name, const std::string& in_topic,
            const std::string& out_topic, const bool threaded = false);
-    virtual PartData run(const PartData& input = nullptr) override;
-    virtual PartData run_threaded(const PartData& input = nullptr) override;
+    virtual PartData run(const PartData input = nullptr) override;
 
 protected:
     virtual void update() override;

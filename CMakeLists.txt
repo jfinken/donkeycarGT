@@ -46,6 +46,7 @@ set(SOURCES          # All .cpp files in src/
     src/vehicle.cpp
     src/parts/camera.cpp
     src/parts/image.cpp
+    src/parts/image-consumer.cpp
     src/parts/image-list-camera.cpp
     src/parts/part.cpp
     include/lock.hpp
@@ -55,6 +56,7 @@ set(SOURCES          # All .cpp files in src/
     include/vehicle.h
     include/parts/camera.h
     include/parts/image.h
+    include/parts/image-consumer.h
     include/parts/image-list-camera.h
     include/parts/part.h
     include/parts/part-io.h

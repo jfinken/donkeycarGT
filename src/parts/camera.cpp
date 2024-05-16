@@ -15,7 +15,8 @@ Camera::Camera(const std::string& part_name, const std::string& in_topic,
 }
 
 // Hide whether or not the part is threaded within the implementation
-PartData Camera::run(const PartData& input) {
+// TODO: move to part.cpp, it is common...
+PartData Camera::run(const PartData input) {
     
     // -Werr=unused-parameter
     // so for now
@@ -29,14 +30,6 @@ PartData Camera::run(const PartData& input) {
         update();
         return m_output;
     }
-}
-
-PartData Camera::run_threaded(const PartData& input) 
-{
-    // -Werr=unused-parameter
-    // so for now
-    (void)input;
-    return m_output;
 }
 
 void Camera::update()

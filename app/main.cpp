@@ -12,6 +12,7 @@
 #include "exampleConfig.h"
 #include "vehicle.h"
 #include "parts/camera.h"
+#include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
 
 // Accessing cmake definitions (here the version number) from source code.
@@ -29,17 +30,18 @@ int main() {
     donkeycar::Vehicle v;
     bool threaded = true;
 
-    // Create a Camera Part
-    //std::shared_ptr<donkeycar::Part> cam = 
-    //    std::make_shared<donkeycar::Camera>("my_cam", "", "cam/image", threaded);
-
-    // Create an ImageListCamera part 
+    // Create an ImageListCamera part to generate imagery
     // TODO: read env for this path
     std::string path = "/home/jfinken/projects/40-49-autonomy/41-sensing-and-perception/41.12-donkeycar/mycar/data/ucsd_afternoon/images/";
     std::shared_ptr<donkeycar::Part> cam = 
-        std::make_shared<donkeycar::ImageListCamera>(path, "my_cam", "", "cam/image", threaded);
+        std::make_shared<donkeycar::ImageListCamera>(path, "camera", "", "cam/image", threaded);
+
+    // Create an Image part to consume imagery
+    std::shared_ptr<donkeycar::Part> img =
+        std::make_shared<donkeycar::ImageConsumer>("image-consumer", "cam/image", "", threaded);
 
     v.add(cam);
+    v.add(img);
     v.start_blocking();
 
     return 0;

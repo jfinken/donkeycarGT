@@ -2,7 +2,9 @@
 #include <experimental/filesystem>
 #include "parts/image-list-camera.h"
 
-//c++14
+#include <opencv2/imgcodecs.hpp>
+
+//experimental in c++14, first-class citizen in c++17
 namespace fs = std::experimental::filesystem;
 namespace donkeycar {
 
@@ -13,37 +15,48 @@ ImageListCamera::ImageListCamera(const std::string& image_path,
     const bool threaded)
     : Camera(part_name, in_topic, out_topic, threaded)
 {
-    for (const auto & entry : fs::directory_iterator(image_path)) {
+    auto path = fs::canonical(image_path);
+    std::vector<std::string> unsorted_files;
+    std::string base_path = "";
+
+    // TODO: move this stuff to some sort of tub_utils.hpp, unit-testable
+    for (const auto & entry : fs::directory_iterator(path)) {
         
         const auto base_name = entry.path().filename().string();
+        base_path = entry.path().parent_path().string();
         constexpr auto match = ".jpg";
         constexpr auto match_size = strlen(match);
         if(base_name.size() >= match_size &&
             // Match the file by exact extension
 	        std::equal(base_name.end() - match_size, base_name.end(), match)) {
-                m_image_filenames.emplace_back(entry.path().string());
+                unsorted_files.emplace_back(base_name);
         }
     }
-    // TODO: custom sort lamba: split by _ then take 0th
-    std::sort(m_image_filenames.begin(), m_image_filenames.end());
-    for(const auto& f : m_image_filenames) {
-        std::cout << f << std::endl;
+    // sort by the numeric filename prefix 
+    std::sort(unsorted_files.begin(), unsorted_files.end(),
+        [](std::string a, std::string b) {
+            int token_a = std::stoi(a.substr(0, a.find("_")));
+            int token_b = std::stoi(b.substr(0, b.find("_")));
+            return token_a < token_b; 
+        });
+    for(const auto& f : unsorted_files) {
+        // FIXME: OS separator if windows or cygwin
+        m_image_filenames.emplace_back(base_path + "/" + f);
     }
     m_num_images = m_image_filenames.size();
 }
 
 void ImageListCamera::update()
 {
-    // quick test
-    std::cout << "ImageListCamera::update..." << std::endl;
+    // for now throttle it as a quick test
     int exec_time_ms = 33;
     std::this_thread::sleep_for(std::chrono::milliseconds(exec_time_ms));
 
-    // actually get the file frame from the vector 
-    //m_output = cv.load(filename) 
-
-    int rows = m_output->frame().rows;
-    int cols = m_output->frame().cols;
-    printf("ImageListCamera::update resulting image: %d x %d\n", cols, rows);
+    // actually get the file frame from the vector
+    if (m_num_images > 0) {
+        m_frame_i = (m_frame_i + 1) % m_num_images;
+        // cv::Mat img = cv::imread(m_image_filenames[m_frame_i], cv::IMREAD_COLOR);
+        m_output->frame() = cv::imread(m_image_filenames[m_frame_i], cv::IMREAD_COLOR);
+    }
 }
 } // namespace donkeycar

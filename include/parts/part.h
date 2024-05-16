@@ -16,9 +16,9 @@ public:
     virtual ~Part();
     virtual void start() override;
     virtual void shutdown();
-    virtual PartData run(const PartData& input = nullptr) = 0;
-    virtual PartData run_threaded(const PartData& input = nullptr) = 0;
-    //virtual const PartData& output() = 0;
+    // Note: no run_threaded API.  If threaded, then the Part will
+    // have already called update.
+    virtual PartData run(const PartData input = nullptr) = 0;
     virtual void update() = 0;
 
     // API for Part input and outputs
