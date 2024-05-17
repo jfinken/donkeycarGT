@@ -8,10 +8,12 @@ This is the very early stage of an iterative port of Donkey Car components from 
 - Why? Good times.
 
 ## Status
-- [X] Initial polymorphic architecture between `Vehicle` and `Parts`
+- [X] Initial polymorphic architecture between `Vehicle` and `Part`
+- [X] Initial smart-pointer, polymorphic architecture `Part` input and output data.
 - [X] Native, _managed_, thread support within Parts (a Part _is_ a pthread)
 - [X] Thread-safe hashtable for Part I/O storage
-- [ ] Support for Camera Parts (beginning with `ImageListCamera` and generic webcam support with OpenCV)
+- [X] Support for Camera Parts: `ImageListCamera` and a generic webcam `WebCamera` via OpenCV
+- [ ] Throttle the `Vehicle` run loop to a specified frequency
 - [ ] Support for Network Parts (mqtt and zmq with pub/sub semantics)
 - [ ] Support for Tub_v2
 - [ ] ...

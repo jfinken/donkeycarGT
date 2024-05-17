@@ -19,7 +19,7 @@ ImageListCamera::ImageListCamera(const std::string& image_path,
     std::vector<std::string> unsorted_files;
     std::string base_path = "";
 
-    // TODO: move this stuff to some sort of tub_utils.hpp, unit-testable
+    // TODO: move this stuff to some sort of tub-utils.hpp, unit-testable
     for (const auto & entry : fs::directory_iterator(path)) {
         
         const auto base_name = entry.path().filename().string();

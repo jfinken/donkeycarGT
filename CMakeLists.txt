@@ -49,6 +49,7 @@ set(SOURCES          # All .cpp files in src/
     src/parts/image-consumer.cpp
     src/parts/image-list-camera.cpp
     src/parts/part.cpp
+    src/parts/web-camera.cpp
     include/lock.hpp
     include/locked-queue.hpp
     include/locked-map.hpp
@@ -60,6 +61,7 @@ set(SOURCES          # All .cpp files in src/
     include/parts/image-list-camera.h
     include/parts/part.h
     include/parts/part-io.h
+    include/parts/web-camera.h
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp

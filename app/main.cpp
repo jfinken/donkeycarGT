@@ -14,6 +14,13 @@
 #include "parts/camera.h"
 #include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
+#include "parts/web-camera.h"
+
+std::string get_env_var( std::string const & key ) 
+{
+    char * val = std::getenv( key.c_str() );
+    return val == NULL ? std::string("") : std::string(val);
+}
 
 // Accessing cmake definitions (here the version number) from source code.
 int main() {
@@ -26,22 +33,38 @@ int main() {
               << "."
               << PROJECT_VERSION_TWEAK
               << std::endl;
-    
+
+    // Instantiate the top-level Vehicle    
     donkeycar::Vehicle v;
     bool threaded = true;
 
     // Create an ImageListCamera part to generate imagery
-    // TODO: read env for this path
-    std::string path = "/home/jfinken/projects/40-49-autonomy/41-sensing-and-perception/41.12-donkeycar/mycar/data/ucsd_afternoon/images/";
-    std::shared_ptr<donkeycar::Part> cam = 
-        std::make_shared<donkeycar::ImageListCamera>(path, "camera", "", "cam/image", threaded);
+    std::string env_key = "DK_TUB_IMAGE_PATH";
+    std::string tub_image_path = get_env_var(env_key);
+    if(tub_image_path.empty()) {
+        std::cerr << "Path to Tub imagery not found at: " << env_key << std::endl;
+        exit(1);
+    }
+    std::shared_ptr<donkeycar::Part> file_cam =
+        std::make_shared<donkeycar::ImageListCamera>(tub_image_path, "file-camera", "", "cam/image", threaded);
+    (void)file_cam;
+
+    // Create a WebCamera part to generate imagery
+    int camera_id = 2;
+    std::shared_ptr<donkeycar::Part> web_cam =
+        std::make_shared<donkeycar::WebCamera>(camera_id, "web-camera", "", "cam/image", threaded);
 
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img =
         std::make_shared<donkeycar::ImageConsumer>("image-consumer", "cam/image", "", threaded);
 
-    v.add(cam);
+    // Add the Parts to the Vehicle!
+    v.add(web_cam);
     v.add(img);
+
+    // And run!
+    // The Vehicle ctor registers SIGINT (Ctrl-C) to exit this blocking method
+    // and safely shutdown and join any threaded parts
     v.start_blocking();
 
     return 0;

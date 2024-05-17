@@ -13,6 +13,8 @@ Part::Part(const std::string part_name, const std::string& in_topic,
     // Note: if threaded, start paused
 
     m_part_name = part_name;
+    m_output = std::make_shared<donkeycar::PartIO>();
+    m_input = std::make_shared<donkeycar::PartIO>();
 }
 Part::~Part()
 {}
@@ -24,6 +26,20 @@ void Part::start()
         donkeycar::concurrency::ManagedThread::start();
         // set it to running
         donkeycar::concurrency::ManagedThread::resume();
+    }
+}
+
+// Pattern for this method.  And hide whether or not the part is threaded
+// within this implementation
+PartData Part::run(const PartData input) {
+    m_input = input;
+    if(this->m_threaded) {
+        // just get latest cached
+        return m_output;
+    } else {
+        // directly call work method (also called by thread if threaded)
+        update();
+        return m_output;
     }
 }
 

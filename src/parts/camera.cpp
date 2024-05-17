@@ -14,8 +14,6 @@ Camera::Camera(const std::string& part_name, const std::string& in_topic,
     m_input = std::make_shared<donkeycar::Image>();
 }
 
-// Hide whether or not the part is threaded within the implementation
-// TODO: move to part.cpp, it is common...
 PartData Camera::run(const PartData input) {
     
     // -Werr=unused-parameter
@@ -35,7 +33,6 @@ PartData Camera::run(const PartData input) {
 void Camera::update()
 {
     // quick test
-    std::cout << "Camera::update..." << std::endl;
     int exec_time_ms = 100;
     std::this_thread::sleep_for(std::chrono::milliseconds(exec_time_ms));
 
@@ -43,10 +40,6 @@ void Camera::update()
     //m_output = actual_camera.capture()
     // ... modest processing, rgb-2-gray, etc
     // m_output = rgb2gray(m_output);
-
-    int rows = m_output->frame().rows;
-    int cols = m_output->frame().cols;
-    printf("Camera::update resulting image: %d x %d\n", cols, rows);
 }
 
 } // namespace donkeycar

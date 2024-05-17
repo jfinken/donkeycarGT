@@ -8,6 +8,7 @@ set(TESTFILES        # All .cpp files in tests/
     #test-managed-thread.cpp
     #test-locked-queue.cpp
     test-locked-map.cpp
+    test-part.cpp
 )
 
 set(TEST_MAIN unit_tests)   # Default name for test executable (change if you wish).
