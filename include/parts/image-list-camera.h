@@ -1,10 +1,11 @@
 #pragma once
 
-#include "parts/camera.h"
+#include "parts/camera.hpp"
 
 namespace donkeycar {
 
-class ImageListCamera : public Camera
+template<typename ImageT>
+class ImageListCamera : public Camera<ImageT>
 {
 public:
     ImageListCamera(const std::string& image_path,

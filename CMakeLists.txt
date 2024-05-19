@@ -33,7 +33,11 @@ find_lto(CXX)
 find_package(Threads REQUIRED)
 find_package(OpenCV 3 REQUIRED)
 MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
-#MESSAGE(STATUS "LINK LIBRARIES ${OpenCV_LIBS}")
+
+# aptitude install libmosquitto-dev
+# TODO: disable the NetworkMqtt part if not found
+find_package(Mosquitto REQUIRED)
+message(STATUS "libmosquitto: ${MOSQUITTO_INCLUDE_DIRS} ${MOSQUITTO_LIBRARIES}")
 
 # --------------------------------------------------------------------------------
 #                         Locate files
@@ -44,24 +48,23 @@ set(SOURCES          # All .cpp files in src/
     src/managed-task-status.cpp
     src/managed-thread.cpp
     src/vehicle.cpp
-    src/parts/camera.cpp
     src/parts/image.cpp
     src/parts/image-consumer.cpp
     src/parts/image-list-camera.cpp
-    src/parts/part.cpp
-    src/parts/web-camera.cpp
+    #src/parts/web-camera.cpp
     include/lock.hpp
     include/locked-queue.hpp
     include/locked-map.hpp
     include/memory.hpp
     include/vehicle.h
-    include/parts/camera.h
+    include/parts/camera.hpp
     include/parts/image.h
     include/parts/image-consumer.h
     include/parts/image-list-camera.h
-    include/parts/part.h
+    #include/parts/network.hpp
+    include/parts/part.hpp
     include/parts/part-io.h
-    include/parts/web-camera.h
+    #include/parts/web-camera.h
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/main.cpp

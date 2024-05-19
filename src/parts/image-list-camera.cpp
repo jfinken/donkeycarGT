@@ -8,12 +8,13 @@
 namespace fs = std::experimental::filesystem;
 namespace donkeycar {
 
-ImageListCamera::ImageListCamera(const std::string& image_path,
+template<typename ImageT>
+ImageListCamera<ImageT>::ImageListCamera(const std::string& image_path,
     const std::string& part_name,
     const std::string& in_topic,
     const std::string& out_topic, 
     const bool threaded)
-    : Camera(part_name, in_topic, out_topic, threaded)
+    : Camera<ImageT>(part_name, in_topic, out_topic, threaded)
 {
     auto path = fs::canonical(image_path);
     std::vector<std::string> unsorted_files;
@@ -46,7 +47,8 @@ ImageListCamera::ImageListCamera(const std::string& image_path,
     m_num_images = m_image_filenames.size();
 }
 
-void ImageListCamera::update()
+template<typename ImageT>
+void ImageListCamera<ImageT>::update()
 {
     // for now throttle it as a quick test
     int exec_time_ms = 33;
@@ -56,7 +58,10 @@ void ImageListCamera::update()
     if (m_num_images > 0) {
         m_frame_i = (m_frame_i + 1) % m_num_images;
         // cv::Mat img = cv::imread(m_image_filenames[m_frame_i], cv::IMREAD_COLOR);
-        m_output->frame() = cv::imread(m_image_filenames[m_frame_i], cv::IMREAD_COLOR);
+        Camera<ImageT>::m_output->frame() = cv::imread(m_image_filenames[m_frame_i], cv::IMREAD_COLOR);
     }
 }
+// Explicit template instantiation
+template class ImageListCamera<donkeycar::Image>;
+
 } // namespace donkeycar

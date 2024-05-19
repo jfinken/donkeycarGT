@@ -5,7 +5,6 @@ namespace donkeycar {
 
 Image::Image() : PartIO()
 {
-
 }
 
 cv::Mat& Image::frame()

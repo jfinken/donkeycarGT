@@ -21,6 +21,7 @@ ImageConsumer::ImageConsumer(
 PartData ImageConsumer::run(const PartData input) {
 
     m_input = std::static_pointer_cast<donkeycar::Image>(input);
+    //m_input = input;
 
     if(this->m_threaded) {
         // just get latest cached
@@ -37,7 +38,7 @@ void ImageConsumer::update()
     if(m_input->frame().empty())
     {
         // TODO: logger
-        std::cout << "[ImageConsumer] Could not read the image" << std::endl;
+        std::cout << "[ImageConsumer] Could not read the image and/or is empty" << std::endl;
         return;
     }
     

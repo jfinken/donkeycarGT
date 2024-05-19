@@ -9,7 +9,7 @@
 
 #include<memory>
 #include<vector>
-#include "parts/part.h"
+#include "parts/part.hpp"
 #include "memory.hpp"
 
 namespace donkeycar {
