@@ -9,6 +9,7 @@ namespace donkeycar {
 Vehicle::Vehicle() {
     m_store = std::make_unique<Memory>();
 
+    // register sigint to gracefully call stop
     cls = this;
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = Vehicle::signal_handler;
@@ -19,7 +20,6 @@ Vehicle::Vehicle() {
 Vehicle::~Vehicle() {}
 void Vehicle::add(PartPtr& part) { m_parts.emplace_back(part); }
 
-// TODO: register keyboard sigint to call stop
 void Vehicle::start_blocking() {
     m_running = true;
     for (const PartPtr& part : m_parts) {
