@@ -61,7 +61,7 @@ set(SOURCES          # All .cpp files in src/
     include/parts/image.h
     include/parts/image-consumer.h
     include/parts/image-list-camera.h
-    #include/parts/network.hpp
+    include/parts/network.hpp
     include/parts/part.hpp
     include/parts/part-io.h
     #include/parts/web-camera.h

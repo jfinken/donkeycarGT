@@ -16,10 +16,6 @@ class Camera : public donkeycar::Part
 public:
     typedef std::shared_ptr<ImageT> ImageData;
 
-    // crucially this is needed to override the API
-    // but note that it returns the type-specific data, ImageData
-    typedef std::shared_ptr<donkeycar::PartIO> PartData;
-
     Camera(const std::string& part_name, const std::string& in_topic,
            const std::string& out_topic, const bool threaded = false)
     : donkeycar::Part(part_name, in_topic, out_topic, threaded)

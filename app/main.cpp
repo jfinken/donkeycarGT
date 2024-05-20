@@ -11,10 +11,9 @@
 
 #include "exampleConfig.h"
 #include "vehicle.h"
-//#include "parts/camera.h"
 #include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
-//#include "parts/network.hpp"
+#include "parts/network.hpp"
 //#include "parts/web-camera.h"
 
 std::string get_env_var( std::string const & key ) 
@@ -40,16 +39,18 @@ int main() {
     bool threaded = true;
 
     // Create an ImageListCamera part to generate imagery
-    std::string env_key = "DK_TUB_IMAGE_PATH";
-    std::string tub_image_path = get_env_var(env_key);
+    const std::string env_key = "DK_TUB_IMAGE_PATH";
+    const std::string tub_image_path = get_env_var(env_key);
+    const std::string cam_img_topic = "cam/image";
+    const std::string pub_img_topic = "image";
+
     if(tub_image_path.empty()) {
         std::cerr << "Path to Tub imagery not found at: " << env_key << std::endl;
         exit(1);
     }
-
     std::shared_ptr<donkeycar::Part> file_cam =
         std::make_shared<donkeycar::ImageListCamera<donkeycar::Image>>
-            (tub_image_path, "file-camera", "", "cam/image", threaded);
+            (tub_image_path, "file-camera", "", cam_img_topic, threaded);
 
     /*
     // Create a WebCamera part to generate imagery
@@ -60,11 +61,15 @@ int main() {
     */
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img =
-        std::make_shared<donkeycar::ImageConsumer>("image-consumer", "cam/image", "", threaded);
+        std::make_shared<donkeycar::ImageConsumer>("image-consumer", cam_img_topic, "", threaded);
 
-    /*
     // Prototyping with a class template for the Network Part
-    auto img_pub = std::make_shared<donkeycar::NetworkMqttPublisher<donkeycar::Image>>();
+    std::shared_ptr<donkeycar::Part> img_pub =
+        std::make_shared<donkeycar::NetworkPublisherMqtt<donkeycar::Image>>(
+            pub_img_topic, cam_img_topic, "", threaded
+        );
+    (void)img_pub;
+    /*
     auto img_sub = std::make_shared<donkeycar::NetworkMqttSubscriber<donkeycar::Image>>();
     auto pose_pub = std::make_shared<donkeycar::NetworkMqttPublisher<donkeycar::Pose>>();
     auto pose_sub = std::make_shared<donkeycar::NetworkMqttSubscriber<donkeycar::Pose>>();

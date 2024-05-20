@@ -21,7 +21,6 @@ ImageConsumer::ImageConsumer(
 PartData ImageConsumer::run(const PartData input) {
 
     m_input = std::static_pointer_cast<donkeycar::Image>(input);
-    //m_input = input;
 
     if(this->m_threaded) {
         // just get latest cached

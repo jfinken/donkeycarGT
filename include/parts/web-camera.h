@@ -19,9 +19,9 @@ public:
 private:
     virtual void update() override;
 
-    cv::VideoCapture cap_;
-    cv::Mat frame_;
-    double fps_;
-    std::chrono::steady_clock::time_point last_frame_;
+    cv::VideoCapture m_cap;
+    cv::Mat m_frame;
+    double m_fps;
+    std::chrono::steady_clock::time_point m_last_frame;
 };
 } // namespace donkeycar
