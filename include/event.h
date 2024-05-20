@@ -11,8 +11,7 @@ namespace concurrency {
 // time.h
 class Mutex;
 class Event {
-
-public:
+   public:
     Event();
     ~Event();
 
@@ -21,24 +20,23 @@ public:
     Event(const Event &&) = delete;
 
     // disable copy-assignment and move-assignment operations
-    Event &operator=(const Event&) = delete;
-    // move assignment operator 
+    Event &operator=(const Event &) = delete;
+    // move assignment operator
     // The && indicates an "rvalue reference"
     // An rvalue reference can bind to an rvalue (but not to an lvalue)
-    Event &operator= (Event &&) = delete;
+    Event &operator=(Event &&) = delete;
 
     void trigger_all();
-    void wait(donkeycar::concurrency::Mutex& mutex);
-    bool wait(donkeycar::concurrency::Mutex& mutext, unsigned int timeout_ms);
+    void wait(donkeycar::concurrency::Mutex &mutex);
+    bool wait(donkeycar::concurrency::Mutex &mutext, unsigned int timeout_ms);
 
-private:
+   private:
     timespec get_monotonic_clock_time();
     timespec ms_to_timespec(const uint64_t milliseconds);
 
     pthread_cond_t m_cond{};
-
 };
-timespec operator+(const timespec&, const timespec&);
+timespec operator+(const timespec &, const timespec &);
 
-} // namespace concurrency 
-} // namespace donkeycar 
+}  // namespace concurrency
+}  // namespace donkeycar

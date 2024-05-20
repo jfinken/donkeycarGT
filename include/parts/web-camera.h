@@ -1,22 +1,21 @@
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgcodecs.hpp>
 #include <chrono>
+#include <opencv2/imgcodecs.hpp>
+#include "opencv2/highgui/highgui.hpp"
 #include "parts/camera.h"
 
 namespace donkeycar {
 
 // A generic web cam powered by opencv
 
-class WebCamera : public Camera
-{
-public:
-    WebCamera(const int camera_id,
-        const std::string& part_name, const std::string& in_topic,
-        const std::string& out_topic, const bool threaded = false);
+class WebCamera : public Camera {
+   public:
+    WebCamera(const int camera_id, const std::string& part_name,
+              const std::string& in_topic, const std::string& out_topic,
+              const bool threaded = false);
 
-private:
+   private:
     virtual void update() override;
 
     cv::VideoCapture m_cap;
@@ -24,4 +23,4 @@ private:
     double m_fps;
     std::chrono::steady_clock::time_point m_last_frame;
 };
-} // namespace donkeycar
+}  // namespace donkeycar

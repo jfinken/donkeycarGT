@@ -36,8 +36,8 @@ MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
 
 # aptitude install libmosquitto-dev
 # TODO: disable the NetworkMqtt part if not found
-find_package(Mosquitto REQUIRED)
-message(STATUS "libmosquitto: ${MOSQUITTO_INCLUDE_DIRS} ${MOSQUITTO_LIBRARIES}")
+#find_package(Mosquitto REQUIRED)
+#message(STATUS "libmosquitto: ${MOSQUITTO_INCLUDE_DIRS} ${MOSQUITTO_LIBRARIES}")
 
 # --------------------------------------------------------------------------------
 #                         Locate files

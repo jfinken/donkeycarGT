@@ -1,40 +1,39 @@
 #pragma once
 
 // Vehicle defines the interface to accept Parts and defines the code that runs
-// the car.  Very similar to the python implementation, Vehicle implements a loop
-// operating at a given frequency (TBD config), and it is in this loop that Parts
-// will get updated.
+// the car.  Very similar to the python implementation, Vehicle implements a
+// loop operating at a given frequency (TBD config), and it is in this loop that
+// Parts will get updated.
 //
 // https://docs.donkeycar.com/parts/about/
 
-#include<memory>
-#include<vector>
-#include "parts/part.hpp"
+#include <memory>
+#include <vector>
 #include "memory.hpp"
+#include "parts/part.hpp"
 
 namespace donkeycar {
 
 // do not really derive from Vehicle
-class Vehicle final
-{
+class Vehicle final {
     typedef std::shared_ptr<donkeycar::Part> PartPtr;
     typedef std::shared_ptr<donkeycar::PartIO> PartDataPtr;
 
-public:
+   public:
     Vehicle();
-    ~Vehicle(); 
+    ~Vehicle();
 
-    void add(PartPtr &part);
+    void add(PartPtr& part);
     // TODO: registers keyboard sigint to call stop
     void start_blocking();
     void stop();
 
     // TODO: this class itself could be manage-threaded
-    //void start_threaded();
-    //void pause();
-    //void run();
+    // void start_threaded();
+    // void pause();
+    // void run();
 
-private:
+   private:
     // Note this works semantically as there should only ever be
     // one "vehicle" object on your car (per process).
     inline static Vehicle* cls;
@@ -49,6 +48,5 @@ private:
     std::unique_ptr<Memory> m_store;
 
     bool m_running{false};
-
 };
-} // namespace donkeycar
+}  // namespace donkeycar

@@ -4,7 +4,7 @@
 #include "mutex.h"
 
 // Status of a task shared with its supervisor or application
-// The intent here is that this class is shared between a 
+// The intent here is that this class is shared between a
 // managed thread and its supervisor, either directly or via
 // ManagedThread API.
 //
@@ -13,12 +13,12 @@
 //
 // The thread on the other hand uses this class to receive commands
 // from and direct acknowledgement to the supervising application.
+
 namespace donkeycar {
 namespace concurrency {
 
-class ManagedTaskStatus
-{
-public:
+class ManagedTaskStatus {
+   public:
     ManagedTaskStatus(const std::string& task_name, bool running);
     void pause_task_blocking();
     void resume_task_blocking();
@@ -28,7 +28,7 @@ public:
     bool is_running() const;
     bool is_paused() const;
 
-private:
+   private:
     // state machine for the thread or task
     enum ManagedTaskStatusStateMachine {
         MTSSM_RUNNING = 0,
@@ -46,6 +46,5 @@ private:
     const std::string m_task_name;
 };
 
-} // namespace concurrency 
-} // namespace donkeycar 
-
+}  // namespace concurrency
+}  // namespace donkeycar

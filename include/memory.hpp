@@ -1,24 +1,22 @@
 #pragma once
 
-#include <optional>
 #include "locked-map.hpp"
 #include "parts/part-io.h"
 
 namespace donkeycar {
 
 // Memory provides thread-safe reads and writes of key-value pairs
-class Memory
-{
+class Memory {
     typedef std::shared_ptr<donkeycar::PartIO> Datum;
-public:
-    explicit Memory() {};
+
+   public:
+    explicit Memory(){};
     Memory(const Memory&) = delete;
     Memory& operator=(const Memory&) = delete;
     ~Memory() = default;
 
     // TODO: support list of keys
-    Datum get(const std::string& key = "")
-    {
+    Datum get(const std::string& key = "") {
         Datum msg;
         try {
             // msg = std::move(m_data.at(key));
@@ -28,12 +26,12 @@ public:
         }
         return msg;
     }
-    void put(const std::string& key, const Datum& msg)
-    {
+    void put(const std::string& key, const Datum& msg) {
         // move semantics on insert
         m_data.insert(key, msg);
     }
-protected:
+
+   protected:
     concurrency::LockedMap<std::string, Datum> m_data;
 };
-} // namespace donkeycar
+}  // namespace donkeycar

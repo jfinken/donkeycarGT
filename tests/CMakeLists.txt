@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.14)
 # List all files containing tests. (Change as needed)
 set(TESTFILES        # All .cpp files in tests/
     main.cpp
-    #test-event.cpp
-    #test-managed-task-status.cpp
-    #test-managed-thread.cpp
-    #test-locked-queue.cpp
+    test-event.cpp
+    test-managed-task-status.cpp
+    test-managed-thread.cpp
+    test-locked-queue.cpp
     test-locked-map.cpp
     test-part.cpp
 )

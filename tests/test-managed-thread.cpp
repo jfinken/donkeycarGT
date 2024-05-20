@@ -1,6 +1,5 @@
-
-#include <iostream>
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #include "doctest/doctest.h"
@@ -13,26 +12,23 @@ static bool dtor_ran;
 static concurrency::Mutex test_mutex("test-mutex");
 static concurrency::Event test_event;
 
-class TestThread : public concurrency::ManagedThread
-{
-public:
-    TestThread(bool start_paused) : ManagedThread("test-thread", start_paused)
-        , task_exec_time_ms(0)
-        , test_thread_should_exit(false)
-    {
+class TestThread : public concurrency::ManagedThread {
+   public:
+    TestThread(bool start_paused)
+        : ManagedThread("test-thread", start_paused),
+          task_exec_time_ms(0),
+          test_thread_should_exit(false) {
         task_executed = false;
         dtor_ran = false;
     }
-    
-    bool wait_for_task_to_run()
-    {
+
+    bool wait_for_task_to_run() {
         concurrency::Lock lock(test_mutex);
         bool success = test_event.wait(test_mutex, 500);
         return success;
     }
-    
-    ~TestThread()
-    {
+
+    ~TestThread() {
         std::cout << "[~doctest-test-thread dtor]" << std::endl;
         dtor_ran = true;
 
@@ -43,12 +39,12 @@ public:
     int task_exec_time_ms;
     std::atomic<bool> test_thread_should_exit;
 
-private:
-    void update() override
-    {
+   private:
+    void update() override {
         std::cout << "[doctest-test-thread] update enter" << std::endl;
         // do some work...
-        std::this_thread::sleep_for(std::chrono::milliseconds(task_exec_time_ms));
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(task_exec_time_ms));
 
         concurrency::Lock lock(test_mutex);
         task_executed = true;
@@ -56,14 +52,10 @@ private:
         test_event.trigger_all();
         std::cout << "[doctest-test-thread] update exit" << std::endl;
     }
-    bool should_exit() const override
-    {
-        return test_thread_should_exit;
-    }
+    bool should_exit() const override { return test_thread_should_exit; }
 };
 
-TEST_CASE("TestThread: start usecases")
-{
+TEST_CASE("TestThread: start usecases") {
     // Not really a good use, but exploring SUBCASE
 
     SUBCASE("TestThread: start_paused") {
@@ -97,8 +89,7 @@ TEST_CASE("TestThread: start usecases")
     }
 }
 
-TEST_CASE("TestThread: exit usecases")
-{
+TEST_CASE("TestThread: exit usecases") {
     SUBCASE("TestThread: exit_not_started_paused") {
         TestThread t(true);
         CHECK(t.is_paused() == true);
@@ -123,7 +114,7 @@ TEST_CASE("TestThread: exit usecases")
         CHECK(t.is_paused() == true);
         t.graceful_exit();
         t.join();
-        
+
         // we started paused, update should not have executed
         CHECK(task_executed == false);
     }
@@ -152,7 +143,6 @@ TEST_CASE("TestThread: exit_after_pause") {
 // gracefully.  Otherwise we could declare the thread outside of
 // the SUBSCASE scope and reuse t.
 TEST_CASE("TestThread: tests with execution time") {
-
     SUBCASE("exit_paused_with_execution_time") {
         TestThread t(false);
         t.task_exec_time_ms = 100;
@@ -170,7 +160,6 @@ TEST_CASE("TestThread: tests with execution time") {
         CHECK(task_executed == false);
     }
     SUBCASE("exit-running-with-exec-time-and-wait") {
-
         TestThread t(false);
         t.task_exec_time_ms = 100;
         CHECK(t.is_paused() == false);
@@ -180,7 +169,7 @@ TEST_CASE("TestThread: tests with execution time") {
 
         t.suspend();
         CHECK(t.is_paused() == true);
-        
+
         // the task should have executed
         CHECK(task_executed == true);
 
@@ -201,7 +190,7 @@ TEST_CASE("TestThread: tests with execution time") {
 
             t.suspend();
             CHECK(t.is_paused() == true);
-            
+
             // the task should have executed
             CHECK(task_executed == true);
 
@@ -210,7 +199,6 @@ TEST_CASE("TestThread: tests with execution time") {
         }
         // can't explicitly call and test the dtor
         CHECK(dtor_ran == true);
-
     }
     SUBCASE("exit-paused-using-dtor-to-cleanup") {
         {
@@ -223,7 +211,7 @@ TEST_CASE("TestThread: tests with execution time") {
 
             t.suspend();
             CHECK(t.is_paused() == true);
-            
+
             // the task should have executed
             CHECK(task_executed == true);
 
@@ -249,7 +237,7 @@ TEST_CASE("TestThread: tests with execution time") {
             t.wait_for_task_to_run();
             task_executed = false;
 
-            // allow task time 
+            // allow task time
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             CHECK(task_executed == false);
         }
@@ -274,7 +262,7 @@ TEST_CASE("TestThread: tests with execution time") {
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             CHECK(task_executed == false);
-            // one more time as proof 
+            // one more time as proof
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
             CHECK(task_executed == false);
         }

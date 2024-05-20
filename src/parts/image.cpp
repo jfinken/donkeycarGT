@@ -1,14 +1,8 @@
-
 #include "parts/image.h"
 
 namespace donkeycar {
 
-Image::Image() : PartIO()
-{
-}
+Image::Image() : PartIO() {}
 
-cv::Mat& Image::frame()
-{
-    return m_frame;
-}
-} // namespace donkeycar
+cv::Mat& Image::frame() { return m_frame; }
+}  // namespace donkeycar

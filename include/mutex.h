@@ -9,8 +9,7 @@ namespace concurrency {
 
 // A mutex based on pthread_mutex_t
 class Mutex {
-
-public:
+   public:
     // Force usage of the ctor taking a string name
     Mutex() = delete;
     explicit Mutex(std::string name);
@@ -26,12 +25,12 @@ public:
     void unlock();
 
     bool try_lock();
-    pthread_mutex_t& underlying_handle();
+    pthread_mutex_t &underlying_handle();
 
-protected:
+   protected:
     pthread_mutex_t m_mutex{};
     std::string m_name;
 };
 
-} // namespace concurrency 
-} // namespace donkeycar 
+}  // namespace concurrency
+}  // namespace donkeycar
