@@ -2,6 +2,8 @@
 
 #include "parts/camera.hpp"
 
+// A "camera" that loads image files from disk
+
 namespace donkeycar {
 
 template <typename ImageT>

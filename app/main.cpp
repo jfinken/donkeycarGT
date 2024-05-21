@@ -13,8 +13,8 @@
 #include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
 #include "parts/network.hpp"
+#include "parts/web-camera.h"
 #include "vehicle.h"
-//#include "parts/web-camera.h"
 
 std::string get_env_var(std::string const& key) {
     char* val = std::getenv(key.c_str());
@@ -30,6 +30,8 @@ int main() {
 
     // Instantiate the top-level Vehicle
     donkeycar::Vehicle v;
+
+    // Whether or not a Part is threaded
     bool threaded = true;
 
     // Create an ImageListCamera part to generate imagery
@@ -46,15 +48,14 @@ int main() {
     std::shared_ptr<donkeycar::Part> file_cam =
         std::make_shared<donkeycar::ImageListCamera<donkeycar::Image>>(
             tub_image_path, "file-camera", "", cam_img_topic, threaded);
-
     /*
     // Create a WebCamera part to generate imagery
     int camera_id = 2;
     std::shared_ptr<donkeycar::Part> web_cam =
-        std::make_shared<donkeycar::WebCamera>(camera_id, "web-camera", "",
-    "cam/image", threaded);
-
+        std::make_shared<donkeycar::WebCamera<donkeycar::Image>>(
+            camera_id, "web-camera", "", cam_img_topic, threaded);
     */
+
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img =
         std::make_shared<donkeycar::ImageConsumer>("image-consumer",

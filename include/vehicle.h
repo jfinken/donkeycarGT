@@ -24,7 +24,6 @@ class Vehicle final {
     ~Vehicle();
 
     void add(PartPtr& part);
-    // TODO: registers keyboard sigint to call stop
     void start_blocking();
     void stop();
 
@@ -41,6 +40,9 @@ class Vehicle final {
 
     void update_parts();
 
+    // Possibly sleep based on the desired frame rate
+    void throttle(std::chrono::time_point<std::chrono::steady_clock>& then);
+
     // Basic data structure to store parts
     std::vector<PartPtr> m_parts;
 
@@ -48,5 +50,6 @@ class Vehicle final {
     std::unique_ptr<Memory> m_store;
 
     bool m_running{false};
+    double m_fps{30.0};  // TODO: config system
 };
 }  // namespace donkeycar
