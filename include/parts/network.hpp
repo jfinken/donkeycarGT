@@ -24,7 +24,10 @@ namespace donkeycar {
 //
 // Also consider a plugin system with `pluginlib`
 
-// A Network publisher publishes messages of any type to a topic.
+/**
+ * @brief A NetworkPublisherMqtt publishes messages of any type to a topic over
+ * MQTT
+ */
 template <typename MessageT>
 class NetworkPublisherMqtt : public donkeycar::Part {
    public:

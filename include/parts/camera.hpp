@@ -8,12 +8,24 @@
 
 namespace donkeycar {
 
-// TODO: to allow the develop to stamp out different image-based message types?
+/**
+ * @brief  Class representing a logical Camera. Concrete cameras should decide
+ * on ImageT data, derive from this class, override run() and update().
+ */
 template <typename ImageT>
 class Camera : public donkeycar::Part {
    public:
     typedef std::shared_ptr<ImageT> ImageData;
 
+    /**
+     * @brief Construct a new Camera object
+     *
+     * @param part_name [in] assigned to the underlying thread, useful for
+     * logging
+     * @param in_topic [in] key used to write data within the in-memory store
+     * @param out_topic [in] key used to read data within the in-memory store
+     * @param threaded [in] whether or not this Part executes on a thread
+     */
     Camera(const std::string& part_name, const std::string& in_topic,
            const std::string& out_topic, const bool threaded = false)
         : donkeycar::Part(part_name, in_topic, out_topic, threaded) {
@@ -22,6 +34,12 @@ class Camera : public donkeycar::Part {
     }
 
    protected:
+    /**
+     * @brief Run method overridden by this Camera and derived Camera Parts
+     *
+     * @param input data processed by this Part
+     * @return PartData
+     */
     virtual PartData run(const PartData input) {
         // -Werr=unused-parameter
         // so for now
@@ -37,6 +55,10 @@ class Camera : public donkeycar::Part {
         }
     }
 
+    /**
+     * @brief Core work method for Parts.  Here more of a placeholder to be
+     * overridden by concrete Cameras.
+     */
     virtual void update() override {
         // quick test
         int exec_time_ms = 100;
@@ -47,7 +69,5 @@ class Camera : public donkeycar::Part {
     // (polymorphically) corrected with the run API
     ImageData m_output;
     ImageData m_input;
-    // ImageData get_input_ptr() {return m_input;}
-    // ImageData get_output_ptr() {return m_output;}
 };
 }  // namespace donkeycar

@@ -5,41 +5,64 @@
 #include "lock.hpp"
 #include "mutex.h"
 
-// An unordered-map with operations protected via a custom lock (RAII).
-//
-// Likely Intel's TBB (tbb::concurrent_unordered_map) or Boost's
-// boost::unordered_map (with appropriate locking) are going to
-// be of higher performance.  Alternatively they may not be
-// available on the given target/platform.
+namespace donkeycar::concurrency {
 
-namespace donkeycar {
-namespace concurrency {
-
+/**
+ * @brief Class providing an unordered-map with operations protected via a
+ * custom lock (RAII). Likely Intel's TBB (tbb::concurrent_unordered_map) or
+ * Boost's boost::unordered_map (with appropriate locking) are going to be of
+ * higher performance.  Alternatively they may not be available on the given
+ * target/platform.
+ * @tparam KeyType
+ * @tparam DataType
+ */
 template <class KeyType, class DataType>
 class LockedMap {
    public:
+    /**
+     * @brief Construct a new LockedMap object but disable copy-construction and
+     * assignment
+     */
     explicit LockedMap();
     LockedMap(const LockedMap&) = delete;
     LockedMap& operator=(const LockedMap&) = delete;
     ~LockedMap();
 
-    // clear the map
+    /**
+     * @brief Clear the map
+     */
     void clear();
 
-    // insert into the map
+    /**
+     * @brief Insert into the map
+     *
+     * @param key
+     * @param value
+     */
     void insert(const KeyType& key, const DataType& value);
 
-    // retrieve from the map with bounds-checking.  It will throw
-    // std::out_of_range if the container does not have a value at key
+    /**
+     * @brief Retrieve from the map with bounds-checking.  It will throw
+     * std::out_of_range if the container does not have a value at key
+     */
     // const DataType& at(const KeyType& key);
     DataType at(const KeyType& key);
 
     // TODO: consider the operator[] overload
 
-    // get the size of the map
+    /**
+     * @brief Get the size of the map
+     *
+     * @return size_t
+     */
     size_t size() const;
 
-    // checks if the map is empty
+    /**
+     * @brief Checks if the map is empty
+     *
+     * @return true
+     * @return false
+     */
     bool empty() const;
 
    private:
@@ -95,5 +118,4 @@ bool LockedMap<KeyType, DataType>::empty() const {
     return m_data.empty();
 }
 
-}  // namespace concurrency
-}  // namespace donkeycar
+}  // namespace donkeycar::concurrency

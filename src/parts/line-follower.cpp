@@ -12,6 +12,7 @@ LineFollower::LineFollower(const std::string& part_name,
     : Part(part_name, in_topic, out_topic, threaded) {
     m_input = std::make_shared<donkeycar::Image>();
 }
+
 PartData LineFollower::run(const PartData input) {
     m_input = std::static_pointer_cast<donkeycar::Image>(input);
 
@@ -24,6 +25,7 @@ PartData LineFollower::run(const PartData input) {
         return m_output;
     }
 }
+
 void LineFollower::get_i_color(cv::Mat& src_img) {
     // grab a horizontal slice of the image via cv Mat copy ctor
     cv::Mat scan_line = src_img(cv::Rect(0, SCAN_Y, src_img.cols, SCAN_HEIGHT));

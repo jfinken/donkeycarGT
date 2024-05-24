@@ -3,29 +3,71 @@
 #include "event.h"
 #include "mutex.h"
 
-// Status of a task shared with its supervisor or application
-// The intent here is that this class is shared between a
-// managed thread and its supervisor, either directly or via
-// ManagedThread API.
-//
-// The supervising application may use this class to check the
-// thread's running state and command it to pause/resume.
-//
-// The thread on the other hand uses this class to receive commands
-// from and direct acknowledgement to the supervising application.
+namespace donkeycar::concurrency {
 
-namespace donkeycar {
-namespace concurrency {
-
+/**
+ * @brief Status of a task shared with a supervisor, application or overlord.
+ * The intent here is that this class is shared between a managed thread and its
+ * managing app, either directly or via ManagedThread API. The supervising
+ * application may use this class to check the thread's running state and
+ * command it to pause/resume. The thread on the other hand uses this class to
+ * receive commands from and direct acknowledgement to the supervising
+ * application.
+ */
 class ManagedTaskStatus {
    public:
+    /**
+     * @brief Construct a new Managed Task Status object
+     *
+     * @param task_name [in] string name assigned to the thread
+     * @param running [in] whether to start the thread in the running state (vs
+     * paused)
+     */
     ManagedTaskStatus(const std::string& task_name, bool running);
+
+    /**
+     * @brief Blocking call to pause a managed thread
+     */
     void pause_task_blocking();
+
+    /**
+     * @brief Blocking call to resume a managed thread
+     */
     void resume_task_blocking();
+
+    /**
+     * @brief Blocking call to exit a managed thread
+     */
     void set_exit_flag_blocking();
+
+    /**
+     * @brief Non-blocking call to pause a managed thread
+     */
     bool request_pause() const;
+
+    /**
+     * @brief Main workhorse of this class.  Threads under management will
+     * call this method and, if not already running, will block and wait
+     *
+     * @return true
+     * @return false
+     */
     bool wait_to_run();
+
+    /**
+     * @brief Return true if in the running state, false otherwise
+     *
+     * @return true
+     * @return false
+     */
     bool is_running() const;
+
+    /**
+     * @brief Return true if in the paused state, false otherwise
+     *
+     * @return true
+     * @return false
+     */
     bool is_paused() const;
 
    private:
@@ -46,5 +88,4 @@ class ManagedTaskStatus {
     const std::string m_task_name;
 };
 
-}  // namespace concurrency
-}  // namespace donkeycar
+}  // namespace donkeycar::concurrency

@@ -4,21 +4,38 @@
 #include "parts/part-io.h"
 #include "parts/part.hpp"
 
-// OpenCV-based controller that takes as input a horizontal slice of the image
-// at a set Y coordinate. It then converts it to HSV and does a color thresh
-// hold to find the yellow pixels. The controller then computes a histogram to
-// find the pixel of maximum yellow to guid a PID controller which seeks to
-// maintain the max yellow at the same point in the image.
-
 // TODO:
 // typedef std::shared_ptr<donkeycar::SteerThrottle> OutputData;
 typedef std::shared_ptr<donkeycar::Image> ImageData;
 
 namespace donkeycar::vision {
+/**
+ * @brief OpenCV-based controller that takes an Image as input input, generates
+ * a horizontal slice of the image at a set Y coordinate. It then converts it to
+ * HSV and does a color threshold to find the desired colored pixels. The
+ * controller then computes a histogram to find the pixel of maximum yellow to
+ * guid a PID controller which seeks to maintain the max yellow at the same
+ * point in the image.
+ */
 class LineFollower : public donkeycar::Part {
    public:
+    /**
+     * @brief Construct a new LineFollower object
+     *
+     * @param part_name [in] assigned to the underlying thread, useful for
+     * logging
+     * @param in_topic [in] key used to write data within the in-memory store
+     * @param out_topic [in] key used to read data within the in-memory store
+     * @param threaded [in] whether or not this Part executes on a thread
+     */
     LineFollower(const std::string& part_name, const std::string& in_topic,
                  const std::string& out_topic, const bool threaded = false);
+    /**
+     * @brief Run method overridden by this Part
+     *
+     * @param input data processed by this Part
+     * @return PartData
+     */
     virtual PartData run(const PartData input = nullptr) override;
 
    protected:
@@ -29,12 +46,25 @@ class LineFollower : public donkeycar::Part {
     PartData m_output;
 
    private:
+    /**
+     * @brief Core work method for this Part. This method is a WIP
+     */
     virtual void update() override;
 
-    // Get the horizontal index of the color at the given image slice
+    /**
+     * @brief Get the horizontal index of the desired color from the input image
+     * This method is a WIP
+     * @param src_img
+     */
+    //
     void get_i_color(cv::Mat& src_img);
 
-    // Build a diagnostic image displaying the mask and max histogram metrics
+    /**
+     * @brief Build a diagnostic image displaying the mask and max histogram
+     * metrics
+     * @param mask [in] 8-bit mask image of sliced size
+     * @param img [in] source image image as input to run()
+     */
     void diagnostic_display(cv::Mat& mask, cv::Mat& img);
 
     // TODO:

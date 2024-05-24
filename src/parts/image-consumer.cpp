@@ -28,6 +28,7 @@ PartData ImageConsumer::run(const PartData input) {
     }
 }
 
+// Main work method, given the frame display it
 void ImageConsumer::update() {
     if (m_input->frame().empty()) {
         // TODO: logger

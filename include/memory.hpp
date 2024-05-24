@@ -5,17 +5,31 @@
 
 namespace donkeycar {
 
-// Memory provides thread-safe reads and writes of key-value pairs
+/**
+ * @brief Class Memory provides thread-safe reads and writes of key-value pairs
+ */
 class Memory {
     typedef std::shared_ptr<donkeycar::PartIO> Datum;
 
    public:
+    /**
+     * @brief Construct a new Memory object. Copy-construction and
+     * copy-assignment are disabled.
+     *
+     */
     explicit Memory(){};
     Memory(const Memory&) = delete;
     Memory& operator=(const Memory&) = delete;
     ~Memory() = default;
 
-    // TODO: support list of keys
+    /**
+     * @brief Return Datum at the given string key. nullptr is returned
+     * if the object at key does not exist.
+     * TODO: support list of keys?
+     *
+     * @param key
+     * @return Datum
+     */
     Datum get(const std::string& key = "") {
         Datum msg;
         try {
@@ -26,8 +40,13 @@ class Memory {
         }
         return msg;
     }
+    /**
+     * @brief Store the object at key in the map.
+     *
+     * @param key
+     * @param msg of type Datum
+     */
     void put(const std::string& key, const Datum& msg) {
-        // move semantics on insert
         m_data.insert(key, msg);
     }
 
