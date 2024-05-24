@@ -3,7 +3,7 @@
 
 This is the very early stage of an implementation of Donkey Car components in modern C++.
 
-- [Donkey Car is a self-driving car platform for hobby remote-control cars](https://dbcs.donkeycar.com/).
+- [Donkey Car is a self-driving car platform for hobby remote-control cars](https://www.donkeycar.com/).
 - Why? Good times.
 
 |    |    |
