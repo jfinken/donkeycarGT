@@ -5,39 +5,26 @@
 #include "part-io.h"
 #include "part.hpp"
 
-/* // See note below
-#include "imu.h"
-#include "laser-scan.h"
-#include "nav-sat-fix.h"
-#include "pose.h"
-*/
-
 namespace donkeycar {
 
-// The interesting bits here are the data types to be
-// serialized and put over the network, and the de/serialization
-// implementation options, e.g. protocol buffers (obviously
-// python.pickle is out of the question :)
-// typedef std::shared_ptr<donkeycar::Image> ImageData;
-// typedef std::shared_ptr<donkeycar::Pose> PoseData;
-// typedef std::shared_ptr<donkeycar::Imu> ImuData;
+// Concepts of data types to be serialized and put over the network, and the
+// de/serialization implementation options, e.g. protocol buffers typedef
 
-/*
+//#include "imu.h"
+//#include "laser-scan.h"
+//#include "nav-sat-fix.h"
+//#include "pose.h"
+// std::shared_ptr<donkeycar::Image> ImageData; typedef
+// std::shared_ptr<donkeycar::Pose> PoseData; typedef
+// std::shared_ptr<donkeycar::Imu> ImuData;
+
+// If required:
+//  class NetworkPublisher;
+//  class NetworkPublisherMqtt : publish NetworkPublisher;
+//
+// Also consider a plugin system with `pluginlib`
 
 // A Network publisher publishes messages of any type to a topic.
-
-// This is what I want:
-shared_ptr<donkeycar::Part<donkeycar::PartIO>> mqtt_pub =
-    std::make_shared<donkeycar::NetworkPublisher<donkeycar::Pose>>
-        (pub_topic, mem_in_topic, mem_out_topic, threaded=true);
-
-// Likely:
-class NetworkPublisher;
-class NetworkPublisherMqtt : publish NetworkPublisher;
-
-// Or maybe a plugin system with pluginlib
-*/
-
 template <typename MessageT>
 class NetworkPublisherMqtt : public donkeycar::Part {
    public:
