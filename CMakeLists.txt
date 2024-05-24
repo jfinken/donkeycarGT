@@ -51,6 +51,7 @@ set(SOURCES          # All .cpp files in src/
     src/parts/image.cpp
     src/parts/image-consumer.cpp
     src/parts/image-list-camera.cpp
+    src/parts/line-follower.cpp
     src/parts/web-camera.cpp
     include/lock.hpp
     include/locked-queue.hpp
@@ -61,6 +62,7 @@ set(SOURCES          # All .cpp files in src/
     include/parts/image.h
     include/parts/image-consumer.h
     include/parts/image-list-camera.h
+    include/parts/line-follower.h
     include/parts/network.hpp
     include/parts/part.hpp
     include/parts/part-io.h

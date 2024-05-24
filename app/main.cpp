@@ -12,6 +12,7 @@
 #include "exampleConfig.h"
 #include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
+#include "parts/line-follower.h"
 #include "parts/network.hpp"
 #include "parts/web-camera.h"
 #include "vehicle.h"
@@ -25,7 +26,8 @@ std::string get_env_var(std::string const& key) {
 int main() {
     std::cout << "DonkeycarGT: Donkeycar, C++, and you v"
               << PROJECT_VERSION_MAJOR << "." << PROJECT_VERSION_MINOR << "."
-              << PROJECT_VERSION_PATCH << "." << PROJECT_VERSION_TWEAK
+              << PROJECT_VERSION_PATCH << "." << PROJECT_VERSION_TWEAK << "\n"
+              << "OpenCV: " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION
               << std::endl;
 
     // Instantiate the top-level Vehicle
@@ -56,6 +58,7 @@ int main() {
             camera_id, "web-camera", "", cam_img_topic, threaded);
     */
 
+    /*
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img =
         std::make_shared<donkeycar::ImageConsumer>("image-consumer",
@@ -66,10 +69,16 @@ int main() {
         std::make_shared<donkeycar::NetworkPublisherMqtt<donkeycar::Image>>(
             pub_img_topic, cam_img_topic, "", threaded);
     (void)img_pub;
+    */
+
+    // Computer vision: line-follower
+    std::shared_ptr<donkeycar::Part> vision =
+        std::make_shared<donkeycar::vision::LineFollower>(
+            "vision", cam_img_topic, "", threaded);
 
     // Add the Parts to the Vehicle!
     v.add(file_cam);
-    v.add(img);
+    v.add(vision);
 
     // And run!
     // The Vehicle ctor registers SIGINT (Ctrl-C) to exit this blocking method
