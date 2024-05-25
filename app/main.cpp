@@ -58,10 +58,12 @@ int main() {
             camera_id, "web-camera", "", cam_img_topic, threaded);
     */
 
+    /*
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img_consumer =
         std::make_shared<donkeycar::ImageConsumer>("image-consumer",
                                                    cam_img_topic, "", threaded);
+    */
 
     /*
     // Prototyping the Network Part (WIP)
@@ -71,15 +73,15 @@ int main() {
     (void)img_pub;
     */
 
-    /*
     // Computer vision: line-follower
     std::shared_ptr<donkeycar::Part> vision =
         std::make_shared<donkeycar::vision::LineFollower>(
             "vision", cam_img_topic, "", threaded);
-    */
+    
     // Add the Parts to the Vehicle!
     v.add(file_cam);
-    v.add(img_consumer);
+    v.add(vision);
+    //v.add(img_consumer);
 
     // And run!
     // The Vehicle ctor registers SIGINT (Ctrl-C) to exit this blocking method

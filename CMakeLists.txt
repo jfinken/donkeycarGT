@@ -31,7 +31,7 @@ include(Warnings)
 # Check for LTO support
 find_lto(CXX)
 find_package(Threads REQUIRED)
-find_package(OpenCV 3 REQUIRED)
+find_package(OpenCV REQUIRED)
 MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
 
 # aptitude install libmosquitto-dev

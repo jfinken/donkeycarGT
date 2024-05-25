@@ -35,7 +35,7 @@ class Memory {
         try {
             // msg = std::move(m_data.at(key));
             msg = m_data.at(key);
-        } catch (std::out_of_range e) {
+        } catch (std::out_of_range& e) {
             return nullptr;
         }
         return msg;
