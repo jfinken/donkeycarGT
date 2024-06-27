@@ -4,7 +4,6 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-
 namespace donkeycar::vision {
 
 LineFollower::LineFollower(const std::string& part_name,
@@ -38,17 +37,16 @@ void LineFollower::get_i_color(cv::Mat& src_img) {
     cv::Mat mask = cv::Mat::zeros(scan_line.size(), CV_8U);
     cv::Mat hist;
     cv::inRange(scan_line, COLOR_THRESHOLD_LOW, COLOR_THRESHOLD_HIGH, mask);
-    
+
     // make a histogram of highest amount of the color
-    cv::reduce(mask, hist, 0, 0 /*cv::REDUCE_SUM in 4.x*/, CV_32SC1);
+    cv::reduce(mask, hist, 0, cv::REDUCE_SUM /*in 4.x*/, CV_32SC1);
 
     // TODO output: index of max color, value of cumulative color at that index,
     // and mask of pixels in range
     cv::Mat max_color = cv::Mat::zeros(hist.size(), CV_32SC1);
-    // cv::reduceArgMax(hist, max_color, 0);  // requires opencv 4x
-    // reduceArgMax(hist, max_color);
-    //std::cout << max_color << std::endl;
-    
+    cv::reduceArgMax(hist, max_color, 0);  // requires opencv 4x
+    // std::cout << max_color << std::endl;
+
     diagnostic_display(mask, src_img);
 }
 
@@ -83,28 +81,4 @@ void LineFollower::diagnostic_display(cv::Mat& mask, cv::Mat& img) {
     cv::waitKey(2);  // 0 to wait for a keystroke
 }
 
-void LineFollower::reduceArgMax(cv::Mat& hist, cv::Mat& max_val) {
-    //cv::Mat classID = cv::Mat::zeros(rows, cols, CV_32S);
-    //cv::Mat maxVal(rows, cols, CV_32F, network_out.data);
-    int rows = hist.rows;
-    int cols = hist.cols;
-    int chns = hist.channels();
-
-    for (int ch = 0; ch < chns; ch++){
-        for (int row = 0; row < rows; row++){
-            //const float *ptrScore = network_out.ptr<float>(0, ch, row);
-            const float *ptrScore = hist.ptr<float>(0, ch, row);
-            //int *ptrMaxCl = classID.ptr<int>(row);
-            //float *ptrMaxVal = maxVal.ptr<float>(row);
-            float *ptrMaxVal = max_val.ptr<float>(row);
-            for (int col = 0; col < cols; col++) {
-                if (ptrScore[col] > ptrMaxVal[col]){
-                    ptrMaxVal[col] = ptrScore[col];
-                    //ptrMaxCl[col] = ch;
-                }
-            }
-        }
-    }
-
-}
 }  // namespace donkeycar::vision

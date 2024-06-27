@@ -67,8 +67,6 @@ class LineFollower : public donkeycar::Part {
      */
     void diagnostic_display(cv::Mat& mask, cv::Mat& img);
 
-    void reduceArgMax(cv::Mat& hist, cv::Mat& max_val);
-
     // TODO:
     //  - implement a config file solution, e.g. JSON, YAML
     //  - read in the config for the below

@@ -31,7 +31,8 @@ include(Warnings)
 # Check for LTO support
 find_lto(CXX)
 find_package(Threads REQUIRED)
-find_package(OpenCV REQUIRED)
+# easiest: docker, if need to upgrade 
+find_package(OpenCV 4.6.0 REQUIRED)
 MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
 
 # aptitude install libmosquitto-dev
