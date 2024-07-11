@@ -34,15 +34,23 @@ This is the very early stage of an implementation of Donkey Car components in mo
 
 ### Building
 
-Requires OpenCV >= 3.2 and CMake >= 3.14.
-
-Build by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
-
-Example:
+Docker is effectively required, unless you're already working with:
+- Tensorflow v2.13.0
+- OpenCV >= 4.6.0
 
 ```bash
+# Build the image
+./build-image.sh
+
+# Edit the paths within this script, then run the container
+./run-image.sh
+
+# Build donkeycarGT by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
 mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release]
+cmake .. -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release] -DTFLITE_ENABLE_XNNPACK=OFF
+# or to modify the graph at runtime with the TFLite GPU delegate
+# cmake .. -DCMAKE_BUILD_TYPE=[Debug | Coverage | Release] -DTFLITE_ENABLE_XNNPACK=OFF -DTFLITE_ENABLE_GPU=ON
+
 make
 ./donkeyCarGT
 make test      # Makes and runs the tests.

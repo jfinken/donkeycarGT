@@ -12,6 +12,7 @@
 #include "exampleConfig.h"
 #include "parts/image-consumer.h"
 #include "parts/image-list-camera.h"
+#include "parts/keras.hpp"
 #include "parts/line-follower.h"
 #include "parts/network.hpp"
 #include "parts/web-camera.h"
@@ -73,15 +74,21 @@ int main() {
     (void)img_pub;
     */
 
-    // Computer vision: line-follower
+    // Computer vision: line-follower (WIP)
     std::shared_ptr<donkeycar::Part> vision =
         std::make_shared<donkeycar::vision::LineFollower>(
             "vision", cam_img_topic, "", threaded);
-    
+
+    // Computer vision: TFLite DNN (WIP)
+    std::shared_ptr<donkeycar::Part> pilot =
+        std::make_shared<donkeycar::vision::KerasPilot>("vision", cam_img_topic,
+                                                        "", threaded);
+
     // Add the Parts to the Vehicle!
     v.add(file_cam);
-    v.add(vision);
-    //v.add(img_consumer);
+    // v.add(vision);
+    v.add(pilot);
+    // v.add(img_consumer);
 
     // And run!
     // The Vehicle ctor registers SIGINT (Ctrl-C) to exit this blocking method

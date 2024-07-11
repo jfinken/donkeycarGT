@@ -9,7 +9,21 @@ set(EXECUTABLE_NAME donkeyCarGT)
 
 # Options: Things you can set via commandline options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
 option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines.
-                                 Set this to OFF if you want to provide your own warning parameters." ON)
+                                 Set this to OFF if you want to provide your own warning parameters." OFF)
+# --------------------------------------------------------------------------------
+# JF: disabling warnings and others as errors due to Tensorflow-Lite source. Once this is built
+# at docker-build time, remove this and below:
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+# --------------------------------------------------------------------------------
+
 option(ENABLE_LTO "Enable link time optimization" ON)
 option(ENABLE_DOCTESTS "Include tests in the library. Setting this to OFF will remove all doctest related code.
                         Tests in tests/*.cpp will still be enabled." ON)
@@ -34,6 +48,17 @@ find_package(Threads REQUIRED)
 # easiest: docker, if need to upgrade 
 find_package(OpenCV 4.6.0 REQUIRED)
 MESSAGE(STATUS "Include dirs ${OpenCV_INCLUDE_DIRS}")
+
+# TF-lite source code in integration in the docker container!
+set(TENSORFLOW_SOURCE_DIR "/root/tensorflow" CACHE PATH
+    "Directory that contains the TensorFlow project"
+)
+# Will build tf-lite and deps: TF v2.13.0
+add_subdirectory(
+    "${TENSORFLOW_SOURCE_DIR}/tensorflow/lite"
+    "${CMAKE_CURRENT_BINARY_DIR}/tensorflow-lite"
+    EXCLUDE_FROM_ALL
+)
 
 # aptitude install libmosquitto-dev
 # TODO: disable the NetworkMqtt part if not found
@@ -63,6 +88,8 @@ set(SOURCES          # All .cpp files in src/
     include/parts/image.h
     include/parts/image-consumer.h
     include/parts/image-list-camera.h
+    include/parts/interpreter.hpp
+    include/parts/keras.hpp
     include/parts/line-follower.h
     include/parts/network.hpp
     include/parts/part.hpp
@@ -89,10 +116,14 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC
     Threads::Threads
     ${OpenCV_LIBS}
     stdc++fs
+    tensorflow-lite
 )
 
 # Set the compile options you want (change as needed).
-target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+# JF: disabling warnings as errors due to Tensorflow-Lite source. Once this is built
+# at docker-build time, re-enable this:
+# target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
+
 # target_compile_options(${LIBRARY_NAME} ... )  # For setting manually.
 
 # Add an executable for the file app/main.cpp.
