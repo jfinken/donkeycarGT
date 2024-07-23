@@ -15,7 +15,7 @@ LOCAL_MYCAR=/home/jfinken/projects/40-49-autonomy/41-sensing-and-perception/41.1
 REMOTE_MYCAR=/root/mycar/
 REMOTE_TUB=${REMOTE_MYCAR}/data/murmurpi4_circuit_launch_20210716_1826/data/images
 
-# TODO: build this into the image itself
+# TODO: build TF into the image itself
 TFLITE_LOCAL_SOURCE=/home/jfinken/projects/40-49-autonomy/41-sensing-and-perception/41.14-tensorflow/tensorflow
 TFLITE_REMOTE_SOURCE=/root/tensorflow
 

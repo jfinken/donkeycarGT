@@ -77,6 +77,7 @@ set(SOURCES          # All .cpp files in src/
     src/parts/image.cpp
     src/parts/image-consumer.cpp
     src/parts/image-list-camera.cpp
+    src/parts/interpreter.cpp
     src/parts/line-follower.cpp
     src/parts/web-camera.cpp
     include/lock.hpp
@@ -88,7 +89,7 @@ set(SOURCES          # All .cpp files in src/
     include/parts/image.h
     include/parts/image-consumer.h
     include/parts/image-list-camera.h
-    include/parts/interpreter.hpp
+    include/parts/interpreter.h
     include/parts/keras.hpp
     include/parts/line-follower.h
     include/parts/network.hpp

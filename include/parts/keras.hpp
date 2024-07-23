@@ -1,7 +1,7 @@
 #pragma once
 
 #include "parts/image.h"
-#include "parts/interpreter.hpp"
+#include "parts/interpreter.h"
 #include "parts/part-io.h"
 #include "parts/part.hpp"
 
@@ -19,7 +19,6 @@ class KerasPilot : public donkeycar::Part {
         m_input = std::make_shared<donkeycar::Image>();
         m_interpreter =
             std::make_unique<donkeycar::vision::TfLiteInterpreter>();
-        // input_shape
 
         // TODO: make this an env var
         std::string model_path =
@@ -27,9 +26,9 @@ class KerasPilot : public donkeycar::Part {
             "pilot_21-08-13_19.tflite";
         m_interpreter->load(model_path);
     }
-    virtual void load(const std::string model_path) {
-        m_interpreter->load(model_path);
-    }
+    // virtual void load(const std::string model_path) {
+    //    m_interpreter->load(model_path);
+    //}
     /**
      * @brief Run method overridden by this Part.  This will invoke the
      * inference method of the Interpreter
@@ -39,7 +38,6 @@ class KerasPilot : public donkeycar::Part {
      */
     virtual PartData run(const PartData input = nullptr) override {
         m_input = std::static_pointer_cast<donkeycar::Image>(input);
-
         if (this->m_threaded) {
             // just get latest cached
             return m_output;
@@ -48,6 +46,7 @@ class KerasPilot : public donkeycar::Part {
             update();
             return m_output;
         }
+        return m_output;
     }
 
    protected:
@@ -61,7 +60,12 @@ class KerasPilot : public donkeycar::Part {
     /**
      * @brief Core work method for this Part. This method is a WIP
      */
-    virtual void update() override { m_interpreter->predict(); }
+    virtual void update() override {
+        // int rows = m_input->frame().rows;
+        // int cols = m_input->frame().cols;
+        // printf("%d x %d\n", rows, cols);
+        m_interpreter->predict(m_input->frame());
+    }
 
     std::unique_ptr<donkeycar::vision::Interpreter> m_interpreter;
 };
