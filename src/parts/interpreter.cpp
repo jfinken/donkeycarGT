@@ -67,10 +67,23 @@ void TfLiteInterpreter::predict(const cv::Mat& input) {
     cv::resize(input, resized, cv::Size(m_input_width, m_input_height));
     int rows = resized.rows;
     int cols = resized.cols;
-    printf("[Interpreter] resized: %d x %d\n", rows, cols);
     // TODO:
-    // std::memcpy(m_interpreter->typed_input_tensor<uchar>(0), resized.data,
-    //            resized.total() * resized.elemSize());
+    // get input & output layer
+    float* input_layer = m_interpreter->typed_input_tensor<float>(0);
+    float* outputLayer = m_interpreter->typed_output_tensor<float>(0);
+
+    // flatten the rgb image to input layer
+    std::memcpy(input_layer, resized.data,
+                resized.total() * resized.elemSize());
+
+    // Infer!
+    auto now = std::chrono::system_clock::now();
+    m_interpreter->Invoke();
+    auto end = std::chrono::system_clock::now();
+    auto elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - now);
+    std::cout << "Inference: " << (1000.0f / elapsed.count()) << " fps"
+              << std::endl;
 
     /*
     // std::cout << "tensors size: " << interpreter_->tensors_size() <<
@@ -81,15 +94,6 @@ void TfLiteInterpreter::predict(const cv::Mat& input) {
     // <<
     // "\n";
 
-    // Infer!
-    auto now = std::chrono::system_clock::now();
-    interpreter_->Invoke();
-    auto end = std::chrono::system_clock::now();
-    auto elapsed =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end - now);
-    // std::cout << "Inference: " << (1000.0f / elapsed.count()) << " fps"
-    // << std::endl;
-    */
 }
 
 }  // namespace donkeycar::vision
