@@ -50,7 +50,8 @@ void Vehicle::throttle(
     int sleepy_time_ms = (int)(period_ns - duration) / 1e6;
     if (sleepy_time_ms > 0.0) {
         std::this_thread::sleep_for(std::chrono::milliseconds(sleepy_time_ms));
-        //printf("[Vehicle] sleeping for %d ms (update_part duration: %.2f ms)\n",
+        // printf("[Vehicle] sleeping for %d ms (update_part duration: %.2f
+        // ms)\n",
         //       sleepy_time_ms, (duration / 1e6));
     }
 }

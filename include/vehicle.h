@@ -67,6 +67,8 @@ class Vehicle final {
     std::unique_ptr<Memory> m_store;
 
     bool m_running{false};
-    double m_fps{30.0};  // TODO: config system
+    // TODO: config system
+    // slow on purpose for diag-imagery
+    double m_fps{10.0};
 };
 }  // namespace donkeycar

@@ -17,6 +17,7 @@ namespace donkeycar::vision {
  * guid a PID controller which seeks to maintain the max yellow at the same
  * point in the image.
  */
+
 class LineFollower : public donkeycar::Part {
    public:
     /**
@@ -52,20 +53,20 @@ class LineFollower : public donkeycar::Part {
     virtual void update() override;
 
     /**
-     * @brief Get the horizontal index of the desired color from the input image
-     * This method is a WIP
+     * @brief Returns the centerline position, total pixels in line, and the
+     * mask
      * @param src_img
      */
-    //
-    void get_i_color(cv::Mat& src_img);
+    std::tuple<int, int, cv::Mat> get_i_color(cv::Mat& src_img);
 
     /**
-     * @brief Build a diagnostic image displaying the mask and max histogram
+     * @brief Build a diagnostic image displaying the mask and line-detection
      * metrics
      * @param mask [in] 8-bit mask image of sliced size
      * @param img [in] source image image as input to run()
      */
-    void diagnostic_display(cv::Mat& mask, cv::Mat& img);
+    void diagnostic_display(cv::Mat& mask, cv::Mat& img, int centerline_x,
+                            int total_pixels);
 
     // TODO:
     //  - implement a config file solution, e.g. JSON, YAML
@@ -80,5 +81,9 @@ class LineFollower : public donkeycar::Part {
     // HSV light yellow (opencv HSV hue value is 0..179, saturation and value
     // are both 0..255)
     const cv::Scalar COLOR_THRESHOLD_HIGH = cv::Scalar(80, 255, 255);
+    // Minimum pixels to consider line detected
+    const int MIN_DETECTION_THRESHOLD = 20;
+    // -1 means use image center, or set specific value
+    const int TARGET_PIXEL = -1;
 };
 }  // namespace donkeycar::vision

@@ -44,7 +44,7 @@ void ImageConsumer::update() {
     cv::resize(img, img, cv::Size(cols * 3, rows * 3));
 
     // cv::imshow("Display window", m_input->frame());
-    cv::imshow("Donkeycar GT", img);
+    cv::imshow("DonkeycarGT", img);
     cv::waitKey(2);  // Wait for a keystroke in the window
 }
 }  // namespace donkeycar

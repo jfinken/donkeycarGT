@@ -35,13 +35,15 @@ int main() {
     donkeycar::Vehicle v;
 
     // Whether or not a Part is threaded
-    bool threaded = true;
+    // FIXME: only non-threaded adhere to FPS
+    bool threaded = false;
 
     // Create an ImageListCamera part to generate imagery
     const std::string env_key = "DK_TUB_IMAGE_PATH";
     const std::string tub_image_path = get_env_var(env_key);
     const std::string cam_img_topic = "cam/image";
     const std::string pub_img_topic = "image";
+    const std::string vision_out_topic = "vision-out";
 
     if (tub_image_path.empty()) {
         std::cerr << "Path to Tub imagery not found at: " << env_key
@@ -59,12 +61,10 @@ int main() {
             camera_id, "web-camera", "", cam_img_topic, threaded);
     */
 
-    /*
     // Create an Image part to consume imagery
     std::shared_ptr<donkeycar::Part> img_consumer =
         std::make_shared<donkeycar::ImageConsumer>("image-consumer",
                                                    cam_img_topic, "", threaded);
-    */
 
     /*
     // Prototyping the Network Part (WIP)
@@ -72,23 +72,25 @@ int main() {
         std::make_shared<donkeycar::NetworkPublisherMqtt<donkeycar::Image>>(
             pub_img_topic, cam_img_topic, "", threaded);
     (void)img_pub;
+    */
 
     // Computer vision: line-follower (WIP)
     std::shared_ptr<donkeycar::Part> vision =
         std::make_shared<donkeycar::vision::LineFollower>(
-            "vision", cam_img_topic, "", threaded);
+            "vision", cam_img_topic, vision_out_topic, threaded);
+
+    /*
+        // Computer vision: TFLite DNN (WIP)
+        std::shared_ptr<donkeycar::Part> pilot =
+            std::make_shared<donkeycar::vision::KerasPilot>(
+                "dnn-vision", cam_img_topic, "", threaded);
     */
 
-    // Computer vision: TFLite DNN (WIP)
-    std::shared_ptr<donkeycar::Part> pilot =
-        std::make_shared<donkeycar::vision::KerasPilot>(
-            "dnn-vision", cam_img_topic, "", threaded);
-
     // Add the Parts to the Vehicle!
-    v.add(file_cam);
-    // v.add(vision);
-    v.add(pilot);
-    // v.add(img_consumer);
+    v.add(file_cam);  // file of imagery
+    v.add(vision);    // OpenCV line-follower
+    // v.add(pilot);        // TFLite DNN
+    v.add(img_consumer);  // image subscriber
 
     // And run!
     // The Vehicle ctor registers SIGINT (Ctrl-C) to exit this blocking method

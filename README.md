@@ -6,9 +6,9 @@ This is the very early stage of an implementation of Donkey Car components in mo
 - [Donkey Car is a self-driving car platform for hobby remote-control cars](https://www.donkeycar.com/).
 - Why? Good times.
 
-|    |    |
-:---:|:---:
-![circuit](resource/donkeycarGT-circuit1.gif) | ![ucsd](resource/donkeycarGT-ucsd-outdoor.gif)
+|    |
+:---:|
+![line-follower](resource/line-follower.mp4.gif)
 
 ### Noteworthy
 - Polymorphic architecture between `Vehicle` and `Part` (Parts are cameras, networks, computer vision components, etc).
@@ -25,8 +25,9 @@ This is the very early stage of an implementation of Donkey Car components in mo
 - [X] Throttle the `Vehicle` run loop to a specified frequency
 - [X] Significant unit-test coverage (always a WIP)
 - [X] `.clang-format` all code
-- [ ] Autonomy support for CV-based line-following (WIP)
-- [ ] Autonomy support for the Imitation Learning keras/TF-lite model
+- [X] Autonomy support for CV-based line-following
+- [ ] Autonomy support for Advanced CV-based line-following (WIP)
+- [ ] Autonomy support for the Imitation Learning keras/TF-lite model (WIP)
 - [ ] Support for Network Parts (mqtt and zmq with pub/sub semantics)
 - [ ] Support for Tub_v2
 - [ ] GPIO HW support
@@ -40,10 +41,10 @@ Docker is effectively required, unless you're already working with:
 
 ```bash
 # Build the image
-./build-image.sh
+./docker/build-image.sh
 
 # Edit the paths within this script, then run the container
-./run-image.sh
+./docker/run-image.sh
 
 # Build donkeycarGT by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
 mkdir build && cd build

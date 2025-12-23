@@ -93,7 +93,7 @@ void TfLiteInterpreter::predict(const cv::Mat& input) {
     // << "\n"; std::cout << "outputs: " << interpreter_->outputs().size()
     // <<
     // "\n";
-
+    */
 }
 
 }  // namespace donkeycar::vision
